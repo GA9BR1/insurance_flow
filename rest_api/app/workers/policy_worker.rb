@@ -8,13 +8,13 @@ class PolicyWorker
   def work(msg)
     begin
       puts "---------------"
-      puts "RECEIVED OASDOAS"
+      puts "MESSAGE RECEIVED"
       puts "---------------"
       parsed_json = JSON.parse(msg)
       assured = Assured.create!(parsed_json["assured"])
       vehicle = Vehicle.create!(parsed_json["vehicle"])
       Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"], assured: assured, vehicle: vehicle)
-      puts "CREATED POLICY"
+      puts "POLICY CREATED"
     rescue StandardError => e
       Sneakers.logger.error "Error occurred: #{e.message}"
     end

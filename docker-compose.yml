@@ -12,7 +12,7 @@ services:
 
   rest_api:
     image: ruby:3.2.2
-    command: bash -c "cd /app && bin/setup && rails s -b 0.0.0.0"
+    command: bash -c "cd /app && rm -r tmp/pids && bin/setup && rails s -b 0.0.0.0"
     ports:
       - "3000:3000"
     volumes:
@@ -24,7 +24,7 @@ services:
 
   graphql_api:
     image: ruby:3.2.2
-    command: bash -c "cd /app && bin/setup && rails s -b 0.0.0.0"
+    command: bash -c "cd /app && rm -r tmp/pids && bin/setup && rails s -b 0.0.0.0"
     ports:
       - "3001:3000"
     volumes:
@@ -32,6 +32,14 @@ services:
       - rubygems:/usr/local/bundle
     depends_on:
       - rest_api
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
 
 volumes:
   rubygems:

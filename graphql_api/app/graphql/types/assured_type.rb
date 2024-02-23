@@ -1,6 +1,6 @@
 module Types
     class AssuredType < Types::BaseObject
-        field :String :name, null: false
-        field :String :email, null: false
+        field :nome, String , null: false
+        field :cpf, String, null: false
     end
 end

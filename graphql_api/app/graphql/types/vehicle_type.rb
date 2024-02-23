@@ -1,8 +1,8 @@
 module Types
     class VehicleType < Types::BaseObject
-        field :String :brand, null: false
-        field :String :model, null: false
-        field :String :year, null: false
-        field :String :plate, null: false
+        field :marca, String , null: false
+        field :modelo, String , null: false
+        field :ano, String , null: false
+        field :placa, String , null: false
     end
 end

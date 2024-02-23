@@ -91,6 +91,9 @@ GEM
     erubi (1.12.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    graphiql-rails (1.9.0)
+      railties
+      sprockets-rails
     graphql (2.2.10)
       base64
     i18n (1.14.1)
@@ -222,6 +225,7 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  graphiql-rails
   graphql
   importmap-rails
   jbuilder

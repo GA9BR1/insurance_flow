@@ -1,0 +1,2 @@
+class Assured < ApplicationRecord
+end

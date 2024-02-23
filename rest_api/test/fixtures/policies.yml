@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  issue_date: 2024-02-22
+  coverage_end: 2024-02-22
+  assured: one
+  vehicle: one
+
+two:
+  issue_date: 2024-02-22
+  coverage_end: 2024-02-22
+  assured: two
+  vehicle: two

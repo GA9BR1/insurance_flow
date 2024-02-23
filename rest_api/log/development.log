@@ -1,40 +1,228 @@
-Started GET "/policies/1" for 172.23.0.4 at 2024-02-23 16:10:18 +0000
-Cannot render console from 172.23.0.4! Allowed networks: 127.0.0.0/127.255.255.255, ::1
-  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.5ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", nil], ["cpf", nil], ["created_at", "2024-02-23 21:36:52.455472"], ["updated_at", "2024-02-23 21:36:52.455472"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (5.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.3ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", nil], ["model", nil], ["year", nil], ["plate", nil], ["created_at", "2024-02-23 21:36:52.471422"], ["updated_at", "2024-02-23 21:36:52.471422"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (2.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.4ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", nil], ["cpf", nil], ["created_at", "2024-02-23 21:45:38.153614"], ["updated_at", "2024-02-23 21:45:38.153614"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.8ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", nil], ["model", nil], ["year", nil], ["plate", nil], ["created_at", "2024-02-23 21:45:38.164439"], ["updated_at", "2024-02-23 21:45:38.164439"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.5ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", nil], ["cpf", nil], ["created_at", "2024-02-23 21:46:09.798026"], ["updated_at", "2024-02-23 21:46:09.798026"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.3ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", nil], ["model", nil], ["year", nil], ["plate", nil], ["created_at", "2024-02-23 21:46:09.809127"], ["updated_at", "2024-02-23 21:46:09.809127"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.5ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "José Hernandes"], ["cpf", "554.074.900-64"], ["created_at", "2024-02-23 21:49:26.125572"], ["updated_at", "2024-02-23 21:49:26.125572"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (1.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.3ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", "BMW"], ["model", "M1"], ["year", "2015"], ["plate", "ZFS-1453"], ["created_at", "2024-02-23 21:49:26.137701"], ["updated_at", "2024-02-23 21:49:26.137701"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mPolicy Create (1.1ms)[0m  [1m[32mINSERT INTO "policies" ("issue_date", "coverage_end", "assured_id", "vehicle_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["issue_date", "2019-03-12"], ["coverage_end", "2020-05-12"], ["assured_id", 7], ["vehicle_id", 7], ["created_at", "2024-02-23 21:49:26.150454"], ["updated_at", "2024-02-23 21:49:26.150454"]]
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+Started GET "/policies/1" for 172.21.0.6 at 2024-02-23 21:49:45 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
 Processing by PoliciesController#show as */*
   Parameters: {"id"=>"1"}
-  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPolicy Load (0.4ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:3:in `show'
   [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:15:in `success'
   [1m[36mVehicle Load (0.2ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:19:in `success'
-Completed 200 OK in 32ms (Views: 0.3ms | ActiveRecord: 6.5ms | Allocations: 25531)
+Completed 200 OK in 37ms (Views: 0.3ms | ActiveRecord: 7.0ms | Allocations: 24333)
 
 
-Started GET "/policies/1" for 172.23.0.4 at 2024-02-23 16:10:20 +0000
-Cannot render console from 172.23.0.4! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Started GET "/policies/2" for 172.21.0.6 at 2024-02-23 21:49:48 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
 Processing by PoliciesController#show as */*
-  Parameters: {"id"=>"1"}
-  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Parameters: {"id"=>"2"}
+  [1m[36mPolicy Load (0.3ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:3:in `show'
-  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mAssured Load (0.3ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:15:in `success'
-  [1m[36mVehicle Load (0.2ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mVehicle Load (0.3ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:19:in `success'
-Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.6ms | Allocations: 2029)
+Completed 200 OK in 6ms (Views: 0.2ms | ActiveRecord: 0.9ms | Allocations: 2029)
 
 
-Started GET "/policies/1" for 172.23.0.4 at 2024-02-23 16:11:03 +0000
-Cannot render console from 172.23.0.4! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Started GET "/policies/3" for 172.21.0.6 at 2024-02-23 21:50:02 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
 Processing by PoliciesController#show as */*
-  Parameters: {"id"=>"1"}
-  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  Parameters: {"id"=>"3"}
+  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:3:in `show'
-  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:15:in `success'
-  [1m[36mVehicle Load (0.1ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mVehicle Load (0.3ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
   ↳ app/controllers/policies_controller.rb:19:in `success'
-Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.5ms | Allocations: 2023)
+Completed 200 OK in 5ms (Views: 0.1ms | ActiveRecord: 0.8ms | Allocations: 2023)
 
 
+Started GET "/policies/4" for 172.21.0.6 at 2024-02-23 21:50:08 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"4"}
+  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:15:in `success'
+  [1m[36mVehicle Load (0.2ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:19:in `success'
+Completed 200 OK in 4ms (Views: 0.2ms | ActiveRecord: 0.6ms | Allocations: 2011)
+
+
+Started GET "/policies/4" for 172.21.0.6 at 2024-02-23 21:52:06 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"4"}
+  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:15:in `success'
+  [1m[36mVehicle Load (0.2ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:19:in `success'
+Completed 200 OK in 3ms (Views: 0.2ms | ActiveRecord: 0.5ms | Allocations: 2023)
+
+
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.4ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "José Hernandes"], ["cpf", "554.074.900-64"], ["created_at", "2024-02-23 21:52:17.463712"], ["updated_at", "2024-02-23 21:52:17.463712"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.7ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", "BMW"], ["model", "M1"], ["year", "2015"], ["plate", "ZFS-1453"], ["created_at", "2024-02-23 21:52:17.467275"], ["updated_at", "2024-02-23 21:52:17.467275"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mPolicy Create (0.7ms)[0m  [1m[32mINSERT INTO "policies" ("issue_date", "coverage_end", "assured_id", "vehicle_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["issue_date", "2019-03-12"], ["coverage_end", "2020-05-12"], ["assured_id", 8], ["vehicle_id", 8], ["created_at", "2024-02-23 21:52:17.471771"], ["updated_at", "2024-02-23 21:52:17.471771"]]
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+Started GET "/policies/6" for 172.21.0.6 at 2024-02-23 21:52:23 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"6"}
+  [1m[36mPolicy Load (0.2ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+Completed 500 Internal Server Error in 2ms (ActiveRecord: 0.2ms | Allocations: 1001)
+
+
+  
+NoMethodError (undefined method `id' for nil:NilClass):
+  
+app/controllers/policies_controller.rb:11:in `success'
+app/controllers/policies_controller.rb:4:in `show'
+Started GET "/policies/5" for 172.21.0.6 at 2024-02-23 21:52:28 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"5"}
+  [1m[36mPolicy Load (0.1ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+  [1m[36mAssured Load (0.2ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:15:in `success'
+  [1m[36mVehicle Load (0.1ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:19:in `success'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.4ms | Allocations: 2011)
+
+
+Started GET "/policies/5" for 172.21.0.6 at 2024-02-23 21:53:54 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"5"}
+  [1m[36mPolicy Load (0.1ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+  [1m[36mAssured Load (0.1ms)[0m  [1m[34mSELECT "assureds".* FROM "assureds" WHERE "assureds"."id" = $1 LIMIT $2[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:15:in `success'
+  [1m[36mVehicle Load (0.1ms)[0m  [1m[34mSELECT "vehicles".* FROM "vehicles" WHERE "vehicles"."id" = $1 LIMIT $2[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:19:in `success'
+Completed 200 OK in 3ms (Views: 0.1ms | ActiveRecord: 0.3ms | Allocations: 2010)
+
+
+Started GET "/policies/7" for 172.21.0.6 at 2024-02-23 21:53:58 +0000
+Cannot render console from 172.21.0.6! Allowed networks: 127.0.0.0/127.255.255.255, ::1
+Processing by PoliciesController#show as */*
+  Parameters: {"id"=>"7"}
+  [1m[36mPolicy Load (0.1ms)[0m  [1m[34mSELECT "policies".* FROM "policies" WHERE "policies"."id" = $1 LIMIT $2[0m  [["id", 7], ["LIMIT", 1]]
+  ↳ app/controllers/policies_controller.rb:3:in `show'
+Completed 500 Internal Server Error in 1ms (ActiveRecord: 0.1ms | Allocations: 959)
+
+
+  
+NoMethodError (undefined method `id' for nil:NilClass):
+  
+app/controllers/policies_controller.rb:11:in `success'
+app/controllers/policies_controller.rb:4:in `show'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.6ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "José Hernandes"], ["cpf", "554.074.900-64"], ["created_at", "2024-02-23 21:54:58.021041"], ["updated_at", "2024-02-23 21:54:58.021041"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.4ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", "BMW"], ["model", "M1"], ["year", "2015"], ["plate", "ZFS-1453"], ["created_at", "2024-02-23 21:54:58.024496"], ["updated_at", "2024-02-23 21:54:58.024496"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mPolicy Create (0.6ms)[0m  [1m[32mINSERT INTO "policies" ("issue_date", "coverage_end", "assured_id", "vehicle_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["issue_date", "2019-03-12"], ["coverage_end", "2020-05-12"], ["assured_id", 9], ["vehicle_id", 9], ["created_at", "2024-02-23 21:54:58.027571"], ["updated_at", "2024-02-23 21:54:58.027571"]]
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mAssured Create (0.5ms)[0m  [1m[32mINSERT INTO "assureds" ("name", "cpf", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"[0m  [["name", "José Hernandes"], ["cpf", "554.074.900-64"], ["created_at", "2024-02-23 21:56:03.371722"], ["updated_at", "2024-02-23 21:56:03.371722"]]
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (2.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:14:in `work'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mVehicle Create (0.4ms)[0m  [1m[32mINSERT INTO "vehicles" ("brand", "model", "year", "plate", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["brand", "BMW"], ["model", "M1"], ["year", "2015"], ["plate", "ZFS-1453"], ["created_at", "2024-02-23 21:56:03.377160"], ["updated_at", "2024-02-23 21:56:03.377160"]]
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (1.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:15:in `work'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mPolicy Create (0.8ms)[0m  [1m[32mINSERT INTO "policies" ("issue_date", "coverage_end", "assured_id", "vehicle_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["issue_date", "2019-03-12"], ["coverage_end", "2020-05-12"], ["assured_id", 10], ["vehicle_id", 10], ["created_at", "2024-02-23 21:56:03.380799"], ["updated_at", "2024-02-23 21:56:03.380799"]]
+  ↳ app/workers/policy_worker.rb:16:in `work'
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/workers/policy_worker.rb:16:in `work'

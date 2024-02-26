@@ -3,11 +3,11 @@
 one:
   issue_date: 2024-02-22
   coverage_end: 2024-02-22
-  assured: one
+  insured: one
   vehicle: one
 
 two:
   issue_date: 2024-02-22
   coverage_end: 2024-02-22
-  assured: two
+  insured: two
   vehicle: two

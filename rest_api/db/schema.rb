@@ -14,7 +14,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_22_205043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "assureds", force: :cascade do |t|
+  create_table "insureds", force: :cascade do |t|
     t.string "name"
     t.string "cpf"
     t.datetime "created_at", null: false
@@ -24,11 +24,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_22_205043) do
   create_table "policies", force: :cascade do |t|
     t.date "issue_date"
     t.date "coverage_end"
-    t.bigint "assured_id", null: false
+    t.bigint "insured_id", null: false
     t.bigint "vehicle_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["assured_id"], name: "index_policies_on_assured_id"
+    t.index ["insured_id"], name: "index_policies_on_insured_id"
     t.index ["vehicle_id"], name: "index_policies_on_vehicle_id"
   end
 
@@ -41,6 +41,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_22_205043) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "policies", "assureds"
+  add_foreign_key "policies", "insureds"
   add_foreign_key "policies", "vehicles"
 end

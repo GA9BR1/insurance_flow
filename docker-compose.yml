@@ -26,13 +26,12 @@ services:
 
   sneakers:
     image: ruby:3.2.2
-    command: bash -c "cd /app/app/workers && sneakers work PolicyWorker --require policy_worker.rb"
+    command: bash -c "cd /app && bundle install && cd /app/app/workers && sneakers work PolicyWorker --require policy_worker.rb"
     volumes:
       - ./rest_api:/app
       - rubygems:/usr/local/bundle
     depends_on:
       - rest_api
-      - rabbitmq
   
   graphql_api:
     image: ruby:3.2.2

@@ -20,7 +20,7 @@ module Mutations
       {
         issue_date: policy[:data_emissao],
         coverage_end: policy[:data_fim_cobertura],
-        assured: {
+        insured: {
           name: policy[:segurado][:nome],
           cpf: policy[:segurado][:cpf]
         },

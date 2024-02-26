@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AssuredTest < ActiveSupport::TestCase
+class InsuredTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

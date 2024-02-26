@@ -1,19 +1,25 @@
 class PoliciesController < ApplicationController
     def show
-        policy = Policy.find_by(id: params[:id])
+        puts '---------'
+        puts params
+        puts params[:id]
+        policy = Policy.find_by!(id: params[:id])
+        puts '-----------'
+        puts policy
+        puts '-----------'
         render json: success(policy)
     end
 
     private
 
     def success(policy)
-        { 
+        {
             "policy_id": policy.id,
             "data_emissao": policy.issue_date,
             "data_fim_cobertura": policy.coverage_end,
             "segurado": {
-                "nome": policy.assured.name,
-                "cpf": policy.assured.cpf,
+                "nome": policy.insured.name,
+                "cpf": policy.insured.cpf,
             },
             "veiculo": {
                 "marca": policy.vehicle.brand,

@@ -18,7 +18,7 @@ q.publish(
   {
     issue_date: "2021-01-01",
     coverage_end: "2021-12-31",
-    assured: {
+    insured: {
       name: "Fulano de Tal",
       cpf: "123.456.789-00"
     },

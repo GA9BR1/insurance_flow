@@ -7,7 +7,7 @@ module Resolvers
     def resolve(id:)
       response = Faraday.get("http://rest_api:3000/policies/#{id}")
       JSON.parse(response.body)
-    rescue e
+    rescue StandardError => e
       raise GraphQL::ExecutionError, e.message
     end
   end

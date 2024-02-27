@@ -9,3 +9,4 @@
 !/tmp/pids/.keep
 
 /.bundle
+log/*

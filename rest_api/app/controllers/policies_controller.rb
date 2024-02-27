@@ -1,12 +1,13 @@
 class PoliciesController < ApplicationController
+    def index
+      limit = params.fetch(:limit, nil)
+      policies = Policy.all.limit(limit)
+
+      render json: policies.map { |policy| success(policy) }
+    end
+
     def show
-        puts '---------'
-        puts params
-        puts params[:id]
         policy = Policy.find_by!(id: params[:id])
-        puts '-----------'
-        puts policy
-        puts '-----------'
         render json: success(policy)
     end
 

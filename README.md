@@ -26,6 +26,7 @@ docker compose up
 
 Fluxo:
 - Query -> Usuário faz uma query pedindo dados de uma apólice com id x -> GraphQL recebe a requisição, e envia uma requisição para a endpoint de get de uma apólice por id -> API Rest devolve a apólice para a API GraphQL -> API GraphQL devolve a resposta da maneira preferida pelo usuário.
+---
 - Mutation -> Usuário faz uma query do tipo mutation enviando dados para a criação de uma apólice -> GraphQL recebe a requisição, e envia uma mensagem para uma fila do RabbitMQ chamada policy_created -> GraphQL devolve uma mensagem falando que tá tudo Ok -> Sneakers consume essa mensagem realizando a tarefa de tentar criar a apólice no banco de dados (na API Rest) -> Caso dê errado é publicado uma mensagem no mesmo RabbitMQ na fila de policy_error e caso dê certo mais nada é feito.
 
 ## Endpoint e Querys GraphQl

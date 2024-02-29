@@ -11,9 +11,11 @@ class PolicyWorker
       parsed_json = JSON.parse(msg)
       puts parsed_json
       ActiveRecord::Base.connection_pool.with_connection do
-        insured = Insured.find_or_create_by(parsed_json["insured"])
-        vehicle = Vehicle.create!(parsed_json["vehicle"])
-        policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"], insured:, vehicle:)
+        ActiveRecord::Base.transaction do
+          insured = Insured.find_or_create_by!(parsed_json["insured"])
+          vehicle = Vehicle.create!(parsed_json["vehicle"])
+          policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"], insured:, vehicle:)
+        end
       end
     rescue StandardError => e
       puts "PolicyWorker ERROR: #{e.message}"

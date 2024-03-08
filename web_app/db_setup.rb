@@ -2,6 +2,17 @@ require 'sequel'
 
 DB = Sequel.connect('sqlite://myDb.db', create: true, max_connections: 5)
 
+
+unless DB.table_exists?(:users)
+  DB.create_table :users do
+    primary_key :id
+    String :name
+    String :email
+    String :image_url
+    String :password_hash
+  end
+end
+
 class User < Sequel::Model
   include BCrypt
 
@@ -12,16 +23,6 @@ class User < Sequel::Model
   def password=(new_password)
     @password = Password.create(new_password)
     self.password_hash = @password
-  end
-end
-
-unless DB.table_exists?(:users)
-  DB.create_table :users do
-    primary_key :id
-    String :name
-    String :email
-    String :image_url
-    String :password_hash
   end
 end
 

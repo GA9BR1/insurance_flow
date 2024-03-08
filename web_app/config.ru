@@ -30,7 +30,7 @@ class MyApplication < Sinatra::Base
   end
 
   get '/' do
-    data = GraphqlRequests.query_all_polices
+    data = GraphqlRequests.query_all_polices(token: session[:user][:value])
     erb :index, locals: { policies: data, user: @user }
   end
 

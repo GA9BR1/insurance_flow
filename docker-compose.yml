@@ -1,5 +1,6 @@
 services:
   postgres:
+    container_name: postgres
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
@@ -11,6 +12,7 @@ services:
       - database:/var/lib/postgresql/data
 
   rest_api:
+    container_name: rest_api
     build: ./rest_api
     command: bash -c "rails s -b 0.0.0.0"
     ports:
@@ -23,19 +25,33 @@ services:
         condition: service_started
       rabbitmq:
         condition: service_healthy
-
+  
   graphql_api:
+    container_name: graphql_api
     build: ./graphql_api
-    command: bash -c "rails s -b 0.0.0.0"
+    command: bash -c "rails s -b 0.0.0.0 -p 3001"
     ports:
-      - "3001:3000"
+      - "3001:3001"
     volumes:
       - ./graphql_api:/app
     entrypoint: ./entrypoint.sh
     depends_on:
       - rest_api
 
+  web_app:
+    container_name: web_app
+    build: ./web_app
+    env_file:
+      - ./web_app/.env
+    volumes:
+      - ./web_app:/app
+    depends_on:
+      - rest_api
+    ports:
+      - "5000:5000"
+
   sneakers:
+    container_name: sneakers
     build: ./rest_api
     command: bash -c "sneakers work PolicyWorker --require app/workers/policy_worker.rb"
     volumes:
@@ -44,6 +60,7 @@ services:
       - rest_api
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3-management
     ports:
       - "5672:5672"

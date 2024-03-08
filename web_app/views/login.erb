@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google OAuth2 Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsuranceFlow</title>
+    <link rel="stylesheet" href="/stylesheets/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+      jQuery(function() {
+        return $.ajax({
+          url: 'https://apis.google.com/js/client:plus.js?onload=gpAsyncInit',
+          dataType: 'script',
+          cache: true
+        });
+      });
+
+      window.gpAsyncInit = function() {
+        gapi.auth.authorize({
+          immediate: true,
+          response_type: 'code',
+          cookie_policy: 'single_host_origin',
+          client_id: '<%= google_key %>',
+          scope: 'email profile'
+        }, function(response) {
+          return;
+        });
+        $('.googleplus-login').click(function(e) {
+          e.preventDefault();
+          gapi.auth.authorize({
+            immediate: false,
+            response_type: 'code',
+            cookie_policy: 'single_host_origin',
+            client_id: '<%= google_key %>',
+            scope: 'email profile'
+          }, function(response) {
+            if (response && !response.error) {
+              // google authentication succeed, now post data to server.
+              jQuery.ajax({type: 'POST', url: "/auth/google_oauth2/callback", data: response,
+                success: function(data) {
+                  // Log the data returning from google.
+                  console.log(data)
+                }
+              });
+            } else {
+              // google authentication failed.
+              console.log("FAILED")
+            }
+          });
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <main class='main-content'>
+      <h2 class='logo'>InsuranceFlow</h2>
+      <h1>Login</h1>
+      <div class='form-div'>
+        <form class='login-form' method='post' action='/authenticate'>
+          <div class='login-inputs-div'>
+              <input class="login-input" type="text" name="email" placeholder='Email' />
+              <input class="login-input" type="password" name="password" placeholder='Senha' />  
+          </div>
+          <button class="login-button" type='submit'>Entrar</button>
+        </form>
+
+       
+        <div class='auth2-div'>
+          <h3>Faça login com</h3>
+          <div class='auth2-options'>
+            <form method='post' action='/auth/google_oauth2'>
+              <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
+              <button class='auth2-login-button' type='submit'><img src="/images/google_logo.svg"></button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

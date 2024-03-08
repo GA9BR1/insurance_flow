@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsuranceFlow</title>
+  <link rel="stylesheet" href="/stylesheets/index.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/"><h2>InsuranceFlow</h2></a>
+    <div class="nav-right-side">
+      <img class="profile-image" src=<%=user.image_url%> alt="Imagem do perfil">
+      <form action="/sign_out" target="_self" method="post"> 
+        <button class="logout-button" type="submit">
+          <img class="logout-icon" src="/images/logout.svg">
+        </button>
+      </form>
+    </div>
+  </nav>
+
+  <main class="main-content"> 
+    <h1>Apólices</h1>
+    <a class="new-policy-link" href="/policies/new">Criar nova apolice</a>
+    <% policies.each do |policy| %>
+      <div class="policy-card">
+        <dl>
+          <div class="dl-description">
+            <dt>Nome</dt>
+            <dd><%= policy['segurado']['nome'] %></dd>
+          </div>
+          <div class="dl-description">
+            <dt>CPF</dt>
+            <dd><%= policy['segurado']['cpf'] %></dd>
+          </div>
+        </dl>
+        <dl>
+          <div class="dl-description">
+            <dt>Data de emissão</dt>
+            <dd><%= policy['dataEmissao'] %></dd>
+          </div>
+          <div class="dl-description">
+            <dt>Data de fim da cobetura</dt>
+            <dd><%= policy['dataFimCobertura']%></dd>
+          </div>
+        </dl>
+        <dl>
+          <div class="dl-description">
+            <dt>Marca</dt>
+            <dd><%= policy['veiculo']['marca'] %></dd>
+          </div>
+          <div class="dl-description">
+            <dt>Modelo</dt>
+            <dd><%= policy['veiculo']['modelo']%></dd>
+          </div>
+          <div class="dl-description">
+            <dt>Ano</dt>
+            <dd><%= policy['veiculo']['ano']%></dd>
+          </div>
+          <div class="dl-description">
+            <dt>Placa</dt>
+            <dd><%= policy['veiculo']['placa']%></dd>
+          </div>
+        </dl>
+      </div>
+    <% end %>
+  </main>
+</body>

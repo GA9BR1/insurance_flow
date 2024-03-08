@@ -17,7 +17,6 @@ Rails.application.configure do
   # Enable server timing
   config.server_timing = true
 
-
   config.public_file_server.headers = {
       "Cache-Control" => "public, max-age=#{2.days.to_i}"
   }
@@ -37,6 +36,7 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  config.hosts << "graphql_api"
 
   config.cache_store = :memory_store
   config.cache_classes = true

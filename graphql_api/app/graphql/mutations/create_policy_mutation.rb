@@ -5,7 +5,7 @@ module Mutations
     field :result, String, null: false
 
     def resolve(policy:)
-      conn = Bunny.new(hostname: "rabbitmq").start
+      conn = Bunny.new(hostname: "rabbitmq", username: ENV['RABBITMQ_USER'], password: ENV['RABBITMQ_PASS']).start
       ch = conn.create_channel
       queue = ch.queue("policy_created", durable: true)
       queue.publish(parse_policy(policy.to_h))

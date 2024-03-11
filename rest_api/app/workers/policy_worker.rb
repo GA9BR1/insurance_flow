@@ -36,7 +36,7 @@ class PolicyWorker
     puts error_message
 
     begin
-      conn = Bunny.new(hostname: "rabbitmq").start
+      conn = Bunny.new(hostname: "rabbitmq", username: ENV['RABBITMQ_USER'], password: ENV['RABBITMQ_PASS']).start
       ch = conn.create_channel
       q  = ch.queue("policy_error", durable: true)
       q.publish(error_message.to_json)

@@ -1,5 +1,5 @@
 Sneakers.configure(
-  amqp: "amqp://guest:guest@rabbitmq:5672",
+  amqp: "amqp://#{ENV['RABBITMQ_USER']}:#{ENV['RABBITMQ_PASS']}@rabbitmq:5672",
   ack: true,
   log: "/app/log/sneakers.log",
 )

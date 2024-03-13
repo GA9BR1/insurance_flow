@@ -65,13 +65,16 @@
           <button class="login-button" type='submit'>Entrar</button>
         </form>
 
-       
         <div class='auth2-div'>
           <h3>Faça login com</h3>
           <div class='auth2-options'>
             <form method='post' action='/auth/google_oauth2'>
               <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
               <button class='auth2-login-button' type='submit'><img src="/images/google_logo.svg"></button>
+            </form>
+            <form method='post' action='/auth/cognito-idp'>
+              <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
+              <button class='auth2-login-button' type='submit'><h3>Cognito</h3></button>
             </form>
           </div>
         </div>

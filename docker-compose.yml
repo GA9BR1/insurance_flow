@@ -14,11 +14,11 @@ services:
   rest_api:
     container_name: rest_api
     build: ./rest_api
-    command: bash -c "rails s -b 0.0.0.0"
+    command: bash -c "rails s -b 0.0.0.0 -p 5000"
     env_file:
       - ./rest_api/.env
     ports:
-      - "3000:3000"
+      - "5000:5000"
     entrypoint: ./entrypoint.sh
     volumes:
       - ./rest_api:/app
@@ -52,7 +52,7 @@ services:
     depends_on:
       - rest_api
     ports:
-      - "5000:5000"
+      - "3000:3000"
 
   sneakers:
     container_name: sneakers

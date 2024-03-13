@@ -7,6 +7,7 @@ require 'sequel'
 require 'bcrypt'
 require 'jwt'
 require 'securerandom'
+require 'omniauth-cognito-idp'
 require_relative './requests/graphql_requests'
 require_relative './db_setup'
 
@@ -19,6 +20,14 @@ class MyApplication < Sinatra::Base
   use OmniAuth::Builder do
     provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], scope: 'email profile'
   end
+  use OmniAuth::Strategies::CognitoIdP,
+  ENV['COGNITO_CLIENT_ID'],
+  ENV['COGNITO_CLIENT_SECRET'],
+  client_options: {
+    site: ENV['COGNITO_USER_POOL_SITE']
+  },
+  scope: 'email'
+
 
   before do
     case request.path_info
@@ -28,6 +37,7 @@ class MyApplication < Sinatra::Base
       logged_in? ? redirect('/') : return
     end
   end
+
 
   get '/' do
     data = GraphqlRequests.query_all_polices(token: session[:user][:value])
@@ -73,6 +83,30 @@ class MyApplication < Sinatra::Base
     redirect '/'
   end
 
+  get '/auth/cognito-idp/callback' do
+    auth = request.env['omniauth.auth']
+    p auth
+    session[:auth] = auth
+
+    <<-HTML
+    <html>
+      <head>
+        <title>Cognito IdP Test</title>
+      </head>
+      <body>
+        <h1>Authenticated with #{params[:name]}</h1>
+        <h2>Authentication Object</h2>
+        <pre>#{auth.pretty_inspect}</pre>
+        <h2>Links</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/userinfo">Userinfo</a></li>
+        </ul>
+      </body>
+    </html>
+    HTML
+  end
+
   private
 
   def logged_in?
@@ -105,14 +139,14 @@ class MyApplication < Sinatra::Base
     user = User.where(email: metadata['info']['email'])
     unless user
       User.create(email: metadata['info']['email'],
-                  name: metadata['info']['name'],
-                  image_url: metadata['info']['image'])
+      name: metadata['info']['name'],
+      image_url: metadata['info']['image'])
     end
   end
 end
 
 Rack::Handler::Puma.run(
   MyApplication,
-  Port: 5000,
+  Port: 3000,
   Host: '0.0.0.0'
 )

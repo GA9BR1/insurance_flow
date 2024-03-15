@@ -9,8 +9,6 @@ require 'jwt'
 require 'securerandom'
 require_relative './requests/graphql_requests'
 require_relative './db_setup'
-require 'base64'
-require 'openssl'
 require 'net/http'
 
 

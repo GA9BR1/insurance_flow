@@ -7,11 +7,15 @@ require 'sequel'
 require 'bcrypt'
 require 'jwt'
 require 'securerandom'
-require 'omniauth-cognito-idp'
 require_relative './requests/graphql_requests'
 require_relative './db_setup'
+require 'base64'
+require 'openssl'
+require 'net/http'
+
 
 class MyApplication < Sinatra::Base
+
   configure do
     set :sessions, true
   end
@@ -20,14 +24,6 @@ class MyApplication < Sinatra::Base
   use OmniAuth::Builder do
     provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], scope: 'email profile'
   end
-  use OmniAuth::Strategies::CognitoIdP,
-  ENV['COGNITO_CLIENT_ID'],
-  ENV['COGNITO_CLIENT_SECRET'],
-  client_options: {
-    site: ENV['COGNITO_USER_POOL_SITE']
-  },
-  scope: 'email'
-
 
   before do
     case request.path_info
@@ -76,6 +72,20 @@ class MyApplication < Sinatra::Base
     # Implementar
   end
 
+  get '/auth/cognito-idp/callback' do
+    app_client_id = ENV['COGNITO_CLIENT_ID']
+    client_secret = ENV['COGNITO_CLIENT_SECRET']
+
+
+    resp = Net::HTTP.post(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=#{app_client_id}&client_secret=#{client_secret}&code=#{params[:code]}&redirect_uri=http://localhost:3000/auth/cognito-idp/callback"), nil)
+    parsed_resp = JSON.parse(resp.body)
+    session[:user] = { value: parsed_resp['access_token'] }
+    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{parsed_resp['access_token']}"})
+    user_info = JSON.parse(resp)
+    User.create(email: user_info['email'], name: user_info['username'])
+    redirect '/'
+  end
+
   get '/auth/:provider/callback' do
     content_type 'text/plain'
     create_updated_user_or_update_user_token
@@ -83,29 +93,10 @@ class MyApplication < Sinatra::Base
     redirect '/'
   end
 
-  get '/auth/cognito-idp/callback' do
-    auth = request.env['omniauth.auth']
-    p auth
-    session[:auth] = auth
-
-    <<-HTML
-    <html>
-      <head>
-        <title>Cognito IdP Test</title>
-      </head>
-      <body>
-        <h1>Authenticated with #{params[:name]}</h1>
-        <h2>Authentication Object</h2>
-        <pre>#{auth.pretty_inspect}</pre>
-        <h2>Links</h2>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/userinfo">Userinfo</a></li>
-        </ul>
-      </body>
-    </html>
-    HTML
+  get '/login-cognito' do
+    redirect 'https://relabs-pool.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=2m0gcvut6sh3ggassgu6srn4jr&redirect_uri=http://localhost:3000/auth/cognito-idp/callback'
   end
+
 
   private
 
@@ -115,6 +106,14 @@ class MyApplication < Sinatra::Base
     decode = JWT.decode encoded_token, ENV['JWT_SECRET'], true, algorithm: 'HS256'
     @user = User.where(email: decode[0]['email']).first
     decode
+  rescue StandardError => e
+    def generate_token(email: params[:email])
+      JWT.encode({id: SecureRandom.uuid, email:}, ENV['JWT_SECRET'], 'HS256')
+    end
+    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{encoded_token}"})
+    user_info = JSON.parse(resp)
+    @user = User.where(email: user_info['email']).first
+    user_info['error'].nil?
   end
 
   def not_logged_in?

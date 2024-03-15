@@ -111,7 +111,6 @@ class MyApplication < Sinatra::Base
       session[:user] = { value: encoded_token, kind: }
     when 'cognito'
       token = get_cognito_token_by_code
-      p token
       session[:user] = { value: token['access_token'], kind: 'cognito' }
     end
   end

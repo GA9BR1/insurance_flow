@@ -81,7 +81,9 @@ class MyApplication < Sinatra::Base
   end
 
   get '/login-cognito' do
-    redirect 'https://relabs-pool.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=2m0gcvut6sh3ggassgu6srn4jr&redirect_uri=http://localhost:3000/auth/cognito-idp/callback'
+    redirect 'https://relabs-pool.auth.us-east-1.amazoncognito.com/login?' \
+      'response_type=code&client_id=2m0gcvut6sh3ggassgu6srn4jr&' \
+      'redirect_uri=http://localhost:3000/auth/cognito-idp/callback'
   end
 
 
@@ -141,7 +143,11 @@ class MyApplication < Sinatra::Base
   end
 
   def logged_in_with_cognito?
-    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{session[:user][:value]}", 'Token-Kind' => 'cognito'})
+    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"),
+                            {
+                              'Authorization' => "Bearer #{session[:user][:value]}",
+                              'Token-Kind' => 'cognito'
+                            })
     user_info = JSON.parse(resp)
     return false if user_info['error']
     @user = OpenStruct.new(email: user_info['email'], name: user_info['username'])

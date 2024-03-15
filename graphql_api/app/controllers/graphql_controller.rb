@@ -11,7 +11,8 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-     :authorization => request.headers['Authorization']
+     :authorization => request.headers['Authorization'],
+     :kind => request.headers['Token-Kind']
     }
     p context
     Rails.logger.info("aaaa #{context}")

@@ -7,7 +7,7 @@ module Resolvers
     def resolve(last_ones: "no_limit")
       Rails.cache.fetch("policies_limit=#{last_ones}", expires_in: 15.seconds) do
         response = Faraday.get("http://rest_api:5000/policies#{last_ones == "no_limit" ? "" : "?limit=#{last_ones}"}",
-                               nil, {'Authorization' => context[:authorization]})
+                               nil, {'Authorization' => context[:authorization], 'Token-Kind' => context[:kind]})
         if(response.status != 200)
           raise StandardError, "Erro ao buscar as polices: #{response.status}"
         end

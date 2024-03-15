@@ -15,7 +15,6 @@ require 'net/http'
 
 
 class MyApplication < Sinatra::Base
-
   configure do
     set :sessions, true
   end
@@ -36,7 +35,7 @@ class MyApplication < Sinatra::Base
 
 
   get '/' do
-    data = GraphqlRequests.query_all_polices(token: session[:user][:value])
+    data = GraphqlRequests.query_all_polices(token: session[:user][:value], token_kind: session[:user][:kind])
     erb :index, locals: { policies: data, user: @user }
   end
 
@@ -50,7 +49,7 @@ class MyApplication < Sinatra::Base
   post '/authenticate' do
     user = User.where(email: params[:email]).first
     if user && user.password == params[:password]
-      update_token
+      update_token(kind: 'login_and_password', email: params[:email])
 
       redirect '/'
     else
@@ -72,24 +71,13 @@ class MyApplication < Sinatra::Base
     # Implementar
   end
 
-  get '/auth/cognito-idp/callback' do
-    app_client_id = ENV['COGNITO_CLIENT_ID']
-    client_secret = ENV['COGNITO_CLIENT_SECRET']
-
-
-    resp = Net::HTTP.post(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/token?grant_type=authorization_code&client_id=#{app_client_id}&client_secret=#{client_secret}&code=#{params[:code]}&redirect_uri=http://localhost:3000/auth/cognito-idp/callback"), nil)
-    parsed_resp = JSON.parse(resp.body)
-    session[:user] = { value: parsed_resp['access_token'] }
-    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{parsed_resp['access_token']}"})
-    user_info = JSON.parse(resp)
-    User.create(email: user_info['email'], name: user_info['username'])
-    redirect '/'
-  end
-
   get '/auth/:provider/callback' do
-    content_type 'text/plain'
-    create_updated_user_or_update_user_token
-
+    if params[:provider] == 'google_oauth2'
+      content_type 'text/plain'
+      create_updated_user_or_update_user_token
+    else
+      update_token(kind: 'cognito')
+    end
     redirect '/'
   end
 
@@ -101,19 +89,19 @@ class MyApplication < Sinatra::Base
   private
 
   def logged_in?
-    return false if session[:user].nil? || session[:user][:value].nil?
-    encoded_token = session[:user][:value]
-    decode = JWT.decode encoded_token, ENV['JWT_SECRET'], true, algorithm: 'HS256'
-    @user = User.where(email: decode[0]['email']).first
-    decode
-  rescue StandardError => e
-    def generate_token(email: params[:email])
-      JWT.encode({id: SecureRandom.uuid, email:}, ENV['JWT_SECRET'], 'HS256')
+    return false if session[:user].nil? || session[:user][:value].nil? || session[:user][:kind].nil?
+    if session[:user][:kind] == 'cognito'
+      resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{session[:user][:value]}", 'Token-Kind' => 'cognito'})
+      user_info = JSON.parse(resp)
+      return false if user_info['error']
+      @user = OpenStruct.new(email: user_info['email'], name: user_info['username'])
+      true
+    else
+      encoded_token = session[:user][:value]
+      decode = JWT.decode encoded_token, ENV['JWT_SECRET'], true, algorithm: 'HS256'
+      @user = User.where(email: decode[0]['email']).first
+      decode
     end
-    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{encoded_token}"})
-    user_info = JSON.parse(resp)
-    @user = User.where(email: user_info['email']).first
-    user_info['error'].nil?
   end
 
   def not_logged_in?
@@ -124,23 +112,41 @@ class MyApplication < Sinatra::Base
     JWT.encode({id: SecureRandom.uuid, email:}, ENV['JWT_SECRET'], 'HS256')
   end
 
-  def update_token
-    encoded_token = generate_token
-    session[:user] = { value: encoded_token }
+  def update_token(kind: 'login_and_password', email: nil)
+    case kind
+    when 'login_and_password', 'oauth_google'
+      encoded_token = generate_token(email:)
+      session[:user] = { value: encoded_token, kind: }
+    when 'cognito'
+      token = get_cognito_token_by_code
+      p token
+      session[:user] = { value: token['access_token'], kind: 'cognito' }
+    end
   end
 
   def create_updated_user_or_update_user_token
     metadata = request.env['omniauth.auth'].to_hash
-    encoded_token = generate_token(email: metadata['info']['email'])
-
-    session[:user] = { value: encoded_token }
-
+    update_token(kind: 'oauth_google', email: metadata['info']['email'])
     user = User.where(email: metadata['info']['email'])
     unless user
       User.create(email: metadata['info']['email'],
       name: metadata['info']['name'],
       image_url: metadata['info']['image'])
     end
+  end
+
+  def get_cognito_token_by_code
+    response = Net::HTTP.post_form(
+      URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/token"),
+      {
+        'grant_type' => 'authorization_code',
+        'client_id' => ENV['COGNITO_CLIENT_ID'],
+        'client_secret' => ENV['COGNITO_CLIENT_SECRET'],
+        'code' => params[:code],
+        'redirect_uri' => 'http://localhost:3000/auth/cognito-idp/callback'
+      }
+    )
+    JSON.parse(response.body)
   end
 end
 

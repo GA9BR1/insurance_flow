@@ -7,7 +7,7 @@ module Resolvers
     def resolve(id:)
       Rails.cache.fetch("policy_#{id}", expires_in: 15.seconds) do
         response = Faraday.get("http://rest_api:5000/policies/#{id}",
-                               nil, {'Authorization' => context[:authorization]})
+                               nil, {'Authorization' => context[:authorization], 'Token-Kind' => context[:kind]})
         if(response.status != 200)
           raise StandardError, "Erro ao buscar a policy: #{response.status}"
         end

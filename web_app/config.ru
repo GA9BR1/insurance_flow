@@ -35,7 +35,9 @@ class MyApplication < Sinatra::Base
 
 
   get '/' do
-    data = GraphqlRequests.query_all_polices(token: session[:user][:value], token_kind: session[:user][:kind])
+    data = GraphqlRequests.query_all_polices(
+      token: session[:user][:value], token_kind: session[:user][:kind]
+    )
     erb :index, locals: { policies: data, user: @user }
   end
 
@@ -73,7 +75,6 @@ class MyApplication < Sinatra::Base
 
   get '/auth/:provider/callback' do
     if params[:provider] == 'google_oauth2'
-      content_type 'text/plain'
       create_updated_user_or_update_user_token
     else
       update_token(kind: 'cognito')
@@ -91,16 +92,9 @@ class MyApplication < Sinatra::Base
   def logged_in?
     return false if session[:user].nil? || session[:user][:value].nil? || session[:user][:kind].nil?
     if session[:user][:kind] == 'cognito'
-      resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{session[:user][:value]}", 'Token-Kind' => 'cognito'})
-      user_info = JSON.parse(resp)
-      return false if user_info['error']
-      @user = OpenStruct.new(email: user_info['email'], name: user_info['username'])
-      true
+      logged_in_with_cognito?
     else
-      encoded_token = session[:user][:value]
-      decode = JWT.decode encoded_token, ENV['JWT_SECRET'], true, algorithm: 'HS256'
-      @user = User.where(email: decode[0]['email']).first
-      decode
+      logged_in_with_google?
     end
   end
 
@@ -147,6 +141,21 @@ class MyApplication < Sinatra::Base
       }
     )
     JSON.parse(response.body)
+  end
+
+  def logged_in_with_cognito?
+    resp = Net::HTTP.get(URI("https://relabs-pool.auth.us-east-1.amazoncognito.com/oauth2/userInfo"), {'Authorization' => "Bearer #{session[:user][:value]}", 'Token-Kind' => 'cognito'})
+    user_info = JSON.parse(resp)
+    return false if user_info['error']
+    @user = OpenStruct.new(email: user_info['email'], name: user_info['username'])
+    true
+  end
+
+  def logged_in_with_google?
+    encoded_token = session[:user][:value]
+    decode = JWT.decode encoded_token, ENV['JWT_SECRET'], true, algorithm: 'HS256'
+    @user = User.where(email: decode[0]['email']).first
+    decode
   end
 end
 

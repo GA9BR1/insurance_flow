@@ -14,6 +14,8 @@ O Insurance Flow é um projeto que simula o "flow" da criação de uma apólice 
 - Sinatra
 - JSON Web Tokens
 - Bcrypt
+- Cognito
+- Google OAuth
 
 ## Como rodar o projeto?
 
@@ -24,25 +26,33 @@ docker compose up
 
 ## Funcionamento
 
-#### API GraphQL: É a api responsável por gerenciar as requisições feitas pelo usuário, através dele são feitas algumas validações de tipos e também faz o envio de mensagem ou requisição para a API Rest.
-#### API Rest: É a api responsável por armazenar os dados das apólices, servir e processar os dados das mesmas.
-#### Web App: É uma aplicação web responsável por servir de interface para o sistema. A mesma possuí autenticação pelo Google ou por Email e Senha.
+#### API GraphQL: É a api responsável por gerenciar as requisições feitas pelo usuário, através dele são feitas algumas validações de tipos e também faz o envio de mensagem ou requisição para a API Rest. Necessita de token de autenticação através do gerado na WebApp.
+#### API Rest: É a api responsável por armazenar os dados das apólices, servir e processar os dados das mesmas. Necessita de token de autenticação através do gerado na WebApp e passado astravés do Graphql, no caso da API.
+#### Web App: É uma aplicação web responsável por servir de interface para o sistema. A mesma possuí autenticação pelo Google, Cognito ou por Email e Senha.
 
 Fluxo:
-- Query -> Usuário na app entra em uma página de listagem de uma apólice específica oque dispara uma query pedindo dados de uma apólice com id x, um token de autorização também é passado -> GraphQL recebe a requisição, checa se o token é válido e envia uma requisição para a endpoint de get de uma apólice por id passando o mesmo token de autorização recebido da app -> API Rest checa se o token é válido e devolve a apólice para a API GraphQL -> API GraphQL devolve a resposta da maneira preferida pelo usuário. O mesmo ocorre para a query que busca múltiplas apólices com exeção da necessidade de se passar um id, pode se passar a quantidade de apólices que quer ou não passar nenhuma que retornará todas.
+- Query -> Usuário na app entra em uma página de listagem de uma apólice específica oque dispara uma query pedindo dados de uma apólice com id x, um token de autorização também é passado, juntamente com o tipo, se é cognito, google_oauth, login_and_password -> GraphQL recebe a requisição, checa se o token é válido e envia uma requisição para a endpoint de get de uma apólice por id passando o mesmo token de autorização recebido da app -> API Rest checa se o token é válido e devolve a apólice para a API GraphQL -> API GraphQL devolve a resposta da maneira preferida pelo usuário. O mesmo ocorre para a query que busca múltiplas apólices com exeção da necessidade de se passar um id, pode se passar a quantidade de apólices que quer ou não passar nenhuma que retornará todas.
 ---
-- Mutation -> Usuário faz uma query do tipo mutation enviando dados para a criação de uma apólice passando o token de autorização -> GraphQL recebe a requisição, valida o token e envia uma mensagem para uma fila do RabbitMQ chamada policy_created passando o usuário e senha do rabbitMq -> GraphQL devolve uma mensagem falando que tá tudo Ok -> Sneakers consume essa mensagem realizando a tarefa de tentar criar a apólice no banco de dados (na API Rest) -> Caso dê errado é publicado uma mensagem no mesmo RabbitMQ na fila de policy_error e caso dê certo mais nada é feito. 
+- Mutation -> Usuário faz uma query do tipo mutation enviando dados para a criação de uma apólice passando o token de autorização, juntamente com o tipo, se é cognito, google_oauth, login_and_password -> GraphQL recebe a requisição, valida o token e envia uma mensagem para uma fila do RabbitMQ chamada policy_created passando o usuário e senha do RabbitMq -> GraphQL devolve uma mensagem falando que tá tudo Ok -> Sneakers consume essa mensagem realizando a tarefa de tentar criar a apólice no banco de dados (na API Rest) -> Caso dê errado é publicado uma mensagem no mesmo RabbitMQ na fila de policy_error e caso dê certo mais nada é feito. 
 ***OBS: Não está sendo possível criar uma apólice pelo fluxo normal pois na app ainda não há nenhum local de criação de apólices e token é gerado nela. É possível pegar o token gerado e passar na requisição caso queira testar.***
+
+
+***OBS: O login através do cognito expira em uma hora e não é renovado a não ser que se faça login novamente, sempre que se entra numa página o login com o cognito é válidado batendo na api do cognito, isso não ocorre no login com o GoogleOauth nem com o login de email e senha***
+
 
 ## Endpoint e Querys GraphQl
 
 O endpoint do GraphQl é **localhost:3001/graphql - POST**
 
+## Exemplo de header de autorização
+Authorization: 'Bearer token_de_autenticação_aqui'
+Token-Kind: 'tipo_do_token_aqui'
+
 #### Mutation
 
 Cria uma apólice na Api Rest. 
 Esse é um processo assíncrono, portanto um retorno OK por parte da Api do GraphQL não garante que a apólice foi criada.
-***OBS: Nessas queries é necessário que se passe o token de autorização que é gerado pela aplicação web.***
+***OBS: Nessas queries é necessário que se passe o token de autorização que é gerado pela aplicação web e o tipo do token de autorização***
 ```graphql
 mutation {
   createPolicy(input:{

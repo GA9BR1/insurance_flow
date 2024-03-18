@@ -10,13 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_02_22_205043) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_192939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "policy_status", ["emited", "waiting_payment", "canceled"]
 
   create_table "insureds", force: :cascade do |t|
     t.string "name"
     t.string "cpf"
+    t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -26,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_22_205043) do
     t.date "coverage_end"
     t.bigint "insured_id", null: false
     t.bigint "vehicle_id", null: false
+    t.enum "status", default: "waiting_payment", null: false, enum_type: "policy_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["insured_id"], name: "index_policies_on_insured_id"

@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: white;
 }
 
 body {
@@ -52,4 +53,72 @@ body {
     width: 25px;
     height: 25px;
     background-color: #242424;
+}
+
+
+main {
+    display: flex;
+    padding: 5px 0 5px 10px;
+    width: 100%;
+    justify-content: center;
+}
+
+.new-policy-form {
+    padding: 20px 20px;
+    background-color: #242424;
+    border-radius: 20px 0px 0px 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+}
+
+h1 {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+}
+
+label {
+    font-family: Arial, sans-serif;
+    font-size: 1.2em;
+}
+
+input {
+    color: black;
+}
+
+.input {
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input-2{
+    font-size: 1.2em;
+    padding: 5px 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.section-header {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    width: 50%;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    background-color: #f4f4f4;
+    color: #242424;
+    font-size: 1.2em;
+    align-self: center;
 }

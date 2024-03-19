@@ -19,31 +19,32 @@
     </div>
   </nav>
   <main>
-    <h1>Nova apólice</h1>
-    <div>
-      <form action="/create_policy" method="post">
-        <label for="end-date">Data do fim da cobertura:</label>
-        <input id="end-date" name="end-date" type='date' placeholder=""/>
-        <label for="prize-value">Valor do prêmio:</label>
-        <input id="prize-value" name="prize-value" type='number' placeholder=""/>
-        <h2>Cliente</h2>
-        <label for="full-name">Nome Completo:</label>
-        <input id="full-name" name="full-name" placeholder=""/>
-        <label for="cpf">CPF:</label>
-        <input id="cpf" name="cpf" placeholder=""/>
-        <label for="email">Email:</label>
-        <input id="email" name="email" placeholder=""/>
-        <h2>Veículo</h2>
-        <label for="car-brand">Marca:</label>
-        <input id="car-brand" name="car-brand" placeholder=""/>
-        <label for="car-model">Modelo:</label>
-        <input id="car-model" name="car-model" placeholder=""/>
-        <label for="car-year">Ano:</label>
-        <input id="car-year" name="car-year" placeholder=""/>
-        <label for="car-plate">Placa:</label>
-        <input id="car-plate" name="car-plate" placeholder=""/>
-        <button type="submit">Submit</button>
-      </form>
-    <div>
+    <form class="new-policy-form" action="/create_policy" method="post">
+      <header>
+        <h1>Nova apólice</h1>
+      </header>
+      <label for="end-date">Data do fim da cobertura:</label>
+      <input class="input" id="end-date" name="end-date" type='date' placeholder=""/>
+      <label for="prize-value">Valor do prêmio:</label>
+      <input class="input-2" id="prize-value" name="prize-value" type='number' placeholder=""/>
+      <h2 class="section-header">Cliente</h2>
+      <label for="full-name">Nome Completo:</label>
+      <input class="input-2" id="full-name" name="full-name" placeholder=""/>
+      <label for="cpf">CPF:</label>
+      <input class="input-2" id="cpf" name="cpf" placeholder=""/>
+      <label for="email">Email:</label>
+      <input class="input-2" id="email" name="email" placeholder=""/>
+      <h2 class="section-header">Veículo</h2>
+      <label for="car-brand">Marca:</label>
+      <input class="input-2" id="car-brand" name="car-brand" placeholder=""/>
+      <label for="car-model">Modelo:</label>
+      <input class="input-2" id="car-model" name="car-model" placeholder=""/>
+      <label for="car-year">Ano:</label>
+      <input class="input-2" id="car-year" name="car-year" placeholder=""/>
+      <label for="car-plate">Placa:</label>
+      <input class="input-2" id="car-plate" name="car-plate" placeholder=""/>
+     
+      <button class="submit-button" type="submit">Criar</button>
+    </form>
   </main>
 </body>

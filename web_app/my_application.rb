@@ -29,6 +29,8 @@ class MyApplication < Sinatra::Base
       not_logged_in? ? redirect('/login') : return
     when '/login'
       logged_in? ? redirect('/') : return
+    when '/policies/new'
+      not_logged_in? ? redirect('/login') : return
     end
   end
 
@@ -64,7 +66,42 @@ class MyApplication < Sinatra::Base
   end
 
   get '/policies/new' do
-    erb :new_policy
+    erb :new_policy, locals: { user: @user }
+  end
+
+  post '/create_policy' do
+    p request.params
+    mutation = {
+  query: <<-GRAPHQL
+    mutation {
+      createPolicy(input: {
+        policy: {
+          dataEmissao: "#{Date.today.to_s}",
+          dataFimCobertura: "#{request.params['end-date']}",
+          valorPremio: #{request.params['prize-value']},
+          segurado: {
+            nome: "#{request.params['full-name']}",
+            cpf: "#{request.params['cpf']}",
+            email: "#{request.params['email']}"
+          },
+          veiculo: {
+            marca: "#{request.params['car-brand']}",
+            modelo: "#{request.params['car-model']}",
+            ano: #{request.params['car-year']},
+            placa: "#{request.params['car-plate']}"
+          }
+        }
+      }) {
+        result
+      }
+    }
+  GRAPHQL
+}.to_json
+
+    token = session[:user][:value]
+    token_kind = session[:user][:kind]
+    response = Net::HTTP.post(URI('http://graphql_api:3001/graphql'), mutation, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}", 'Token-Kind' => token_kind)
+    p response.body
   end
 
   post '/policies' do

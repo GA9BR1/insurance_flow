@@ -1,9 +1,9 @@
 class CreateInsureds < ActiveRecord::Migration[7.0]
   def change
     create_table :insureds do |t|
-      t.string :name
-      t.string :cpf
-      t.string :email
+      t.string :name, null: false
+      t.string :cpf, null: false
+      t.string :email, null: false
 
       t.timestamps
     end

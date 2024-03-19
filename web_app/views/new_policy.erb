@@ -1,1 +1,49 @@
-<p>Implementar este formulario</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsuranceFlow</title>
+  <link rel="stylesheet" href="/stylesheets/new.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/"><h2>InsuranceFlow</h2></a>
+    <div class="nav-right-side">
+      <img class="profile-image" src=<%=!user.image_url ? user.image_url : 'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'%> alt="Imagem do perfil">
+      <form action="/sign_out" target="_self" method="post"> 
+        <button class="logout-button" type="submit">
+          <img class="logout-icon" src="/images/logout.svg">
+        </button>
+      </form>
+    </div>
+  </nav>
+  <main>
+    <h1>Nova apólice</h1>
+    <div>
+      <form action="/create_policy" method="post">
+        <label for="end-date">Data do fim da cobertura:</label>
+        <input id="end-date" name="end-date" type='date' placeholder=""/>
+        <label for="prize-value">Valor do prêmio:</label>
+        <input id="prize-value" name="prize-value" type='number' placeholder=""/>
+        <h2>Cliente</h2>
+        <label for="full-name">Nome Completo:</label>
+        <input id="full-name" name="full-name" placeholder=""/>
+        <label for="cpf">CPF:</label>
+        <input id="cpf" name="cpf" placeholder=""/>
+        <label for="email">Email:</label>
+        <input id="email" name="email" placeholder=""/>
+        <h2>Veículo</h2>
+        <label for="car-brand">Marca:</label>
+        <input id="car-brand" name="car-brand" placeholder=""/>
+        <label for="car-model">Modelo:</label>
+        <input id="car-model" name="car-model" placeholder=""/>
+        <label for="car-year">Ano:</label>
+        <input id="car-year" name="car-year" placeholder=""/>
+        <label for="car-plate">Placa:</label>
+        <input id="car-plate" name="car-plate" placeholder=""/>
+        <button type="submit">Submit</button>
+      </form>
+    <div>
+  </main>
+</body>

@@ -20,9 +20,11 @@ module Mutations
       {
         issue_date: policy[:data_emissao],
         coverage_end: policy[:data_fim_cobertura],
+        prize_value: policy[:valor_premio],
         insured: {
           name: policy[:segurado][:nome],
-          cpf: policy[:segurado][:cpf]
+          cpf: policy[:segurado][:cpf],
+          email: policy[:segurado][:email]
         },
         vehicle: {
           brand: policy[:veiculo][:marca],

@@ -18,9 +18,12 @@ class PoliciesController < ApplicationController
             "policy_id": policy.id,
             "data_emissao": policy.issue_date,
             "data_fim_cobertura": policy.coverage_end,
+            "valor_premio": policy.prize_value,
+            "status": policy.status,
             "segurado": {
                 "nome": policy.insured.name,
                 "cpf": policy.insured.cpf,
+                "email": policy.insured.email,
             },
             "veiculo": {
                 "marca": policy.vehicle.brand,

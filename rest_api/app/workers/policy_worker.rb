@@ -14,7 +14,8 @@ class PolicyWorker
         ActiveRecord::Base.transaction do
           insured = Insured.find_or_create_by!(parsed_json["insured"])
           vehicle = Vehicle.create!(parsed_json["vehicle"])
-          policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"], insured:, vehicle:)
+          policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"],
+                                  prize_value: parsed_json["prize_value"], insured:, vehicle:)
         end
       end
     rescue StandardError => e

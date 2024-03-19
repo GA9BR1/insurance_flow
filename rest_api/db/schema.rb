@@ -19,18 +19,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_192939) do
   create_enum "policy_status", ["emited", "waiting_payment", "canceled"]
 
   create_table "insureds", force: :cascade do |t|
-    t.string "name"
-    t.string "cpf"
-    t.string "email"
+    t.string "name", null: false
+    t.string "cpf", null: false
+    t.string "email", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "policies", force: :cascade do |t|
-    t.date "issue_date"
-    t.date "coverage_end"
+    t.date "issue_date", null: false
+    t.date "coverage_end", null: false
     t.bigint "insured_id", null: false
     t.bigint "vehicle_id", null: false
+    t.decimal "prize_value", precision: 10, scale: 2, null: false
     t.enum "status", default: "waiting_payment", null: false, enum_type: "policy_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -39,10 +40,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_192939) do
   end
 
   create_table "vehicles", force: :cascade do |t|
-    t.string "brand"
-    t.string "model"
-    t.string "year"
-    t.string "plate"
+    t.string "brand", null: false
+    t.string "model", null: false
+    t.string "year", null: false
+    t.string "plate", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

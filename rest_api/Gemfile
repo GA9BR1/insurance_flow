@@ -52,6 +52,8 @@ gem "bootsnap", require: false
 gem "bunny"
 gem "sneakers"
 gem "jwt"
+gem "stripe"
+gem "byebug"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

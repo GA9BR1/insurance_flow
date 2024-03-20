@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_192939) do
     t.bigint "insured_id", null: false
     t.bigint "vehicle_id", null: false
     t.decimal "prize_value", precision: 10, scale: 2, null: false
+    t.string "payment_link"
     t.enum "status", default: "waiting_payment", null: false, enum_type: "policy_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

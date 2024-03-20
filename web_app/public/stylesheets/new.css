@@ -122,3 +122,18 @@ input {
     font-size: 1.2em;
     align-self: center;
 }
+
+.inputs-div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.notification {
+    position: fixed;
+    top: 80px;
+    right: 0px;
+    background-color: rgb(203, 15, 15);
+    padding: 10px;
+    transition: opacity 0.3s ease-in-out;
+}

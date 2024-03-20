@@ -7,21 +7,37 @@ class PolicyWorker
   from_queue "policy_created"
 
   def work(msg)
-    begin
-      parsed_json = JSON.parse(msg)
-      puts parsed_json
-      ActiveRecord::Base.connection_pool.with_connection do
-        ActiveRecord::Base.transaction do
-          insured = Insured.find_or_create_by!(parsed_json["insured"])
-          vehicle = Vehicle.create!(parsed_json["vehicle"])
-          policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"],
-                                  prize_value: parsed_json["prize_value"], insured:, vehicle:)
-        end
+    parsed_json = JSON.parse(msg)
+    puts parsed_json
+    ActiveRecord::Base.connection_pool.with_connection do
+      ActiveRecord::Base.transaction do
+        Stripe.api_key = ENV['STRIPE_SECRET_KEY']
+        response = Stripe::Price.create({
+          currency: 'brl',
+          unit_amount: parsed_json['prize_value'].to_i * 100,
+          product_data: { name: 'Seguro' },
+        })
+        response = Stripe::PaymentLink.create({
+          line_items: [
+            {
+              price: response.id,
+              quantity: 1,
+            },
+          ],
+        })
+        insured = Insured.find_or_create_by!(parsed_json["insured"])
+        vehicle = Vehicle.create!(parsed_json["vehicle"])
+        policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"],
+                                prize_value: parsed_json["prize_value"], insured:, vehicle:, payment_link: response.url)
+        response = Net::HTTP.post(URI('http://web_app:3000/payment_link'),
+        PolicySerializer.serialize(policy).to_json,
+        'Content-Type' => 'application/json')
+      rescue StandardError => e
+        puts "Error occurred during transaction: #{e.message}"
+        Sneakers.logger.error "Error occurred during transaction: #{e.message}"
+        Stripe::PaymentLink.retrieve(response.id)
+        handle_error(msg, e)
       end
-    rescue StandardError => e
-      puts "PolicyWorker ERROR: #{e.message}"
-      Sneakers.logger.error "Error occurred: #{e.message}"
-      handle_error(msg, e)
     end
     ack!
   end

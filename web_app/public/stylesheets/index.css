@@ -84,26 +84,39 @@ body {
     padding: 20px;
 }
 
+.polices-div {
+    width: 100%;
+}
+
 .dl-description {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
+.notification {
+    position: fixed;
+    top: 80px;
+    right: 0px;
+    background-color: green;
+    padding: 10px;
+    transition: opacity 0.3s ease-in-out;
+}
+
 @media (min-width: 768px) and (max-width: 1024px){
-    .policy-card {
+    .polices-div {
         width: 70%;
     }
 }
  
 @media (min-width: 1025px) and (max-width: 1607px){
-    .policy-card {
+    .polices-div {
         width: 50%;
     }
 }
 
 @media (min-width: 1607px) {
-    .policy-card {
+    .polices-div {
         width: 30%;
     }
 }

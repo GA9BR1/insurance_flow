@@ -7,6 +7,7 @@ class CreatePolicies < ActiveRecord::Migration[7.0]
       t.references :insured, null: false, foreign_key: true
       t.references :vehicle, null: false, foreign_key: true
       t.decimal :prize_value, precision: 10, scale: 2, null: false
+      t.string :payment_link
       t.enum :status, enum_type: 'policy_status', default: 'waiting_payment', null: false
 
       t.timestamps

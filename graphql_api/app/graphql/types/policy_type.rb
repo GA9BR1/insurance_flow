@@ -7,6 +7,7 @@ module Types
     field :data_fim_cobertura, String, null: false
     field :valor_premio, Float, null: false
     field :status, Types::PolicyStatusType, null: false
+    field :link_pagamento, String, null: false
     field :segurado, Types::InsuredType, null: false
     field :veiculo, Types::VehicleType, null: false
   end

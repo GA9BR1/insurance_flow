@@ -22,55 +22,64 @@
   <main class="main-content"> 
     <h1>Apólices</h1>
     <a class="new-policy-link" href="/policies/new">Criar nova apolice</a>
-    <% policies.each do |policy| %>
-      <div class="policy-card">
-        <dl>
-          <div class="dl-description">
-            <dt>Nome</dt>
-            <dd><%= policy['segurado']['nome'] %></dd>
-          </div>
-          <div class="dl-description">
-            <dt>CPF</dt>
-            <dd><%= policy['segurado']['cpf'] %></dd>
-          </div>
-        </dl>
-        <dl>
-          <div class="dl-description">
-            <dt>Data de emissão</dt>
-            <dd><%= policy['dataEmissao'] %></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Data de fim da cobetura</dt>
-            <dd><%= policy['dataFimCobertura']%></dd>
-          </div>
-        </dl>
-        <dl>
-          <div class="dl-description">
-            <dt>Marca</dt>
-            <dd><%= policy['veiculo']['marca'] %></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Modelo</dt>
-            <dd><%= policy['veiculo']['modelo']%></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Ano</dt>
-            <dd><%= policy['veiculo']['ano']%></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Placa</dt>
-            <dd><%= policy['veiculo']['placa']%></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Status</dt>
-            <dd><%= policy['status']%></dd>
-          </div>
-          <div class="dl-description">
-            <dt>Valor do Prêmio</dt>
-            <dd><%= policy['valorPremio']%></dd>
-          </div>
-        </dl>
-      </div>
-    <% end %>
+    <div id="polices-div" class="polices-div"> 
+      <% policies.each do |policy| %>
+        <div class="policy-card">
+          <dl>
+            <div class="dl-description">
+              <dt>Nome</dt>
+              <dd><%= policy['segurado']['nome'] %></dd>
+            </div>
+            <div class="dl-description">
+              <dt>CPF</dt>
+              <dd><%= policy['segurado']['cpf'] %></dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="dl-description">
+              <dt>Data de emissão</dt>
+              <dd><%= policy['dataEmissao'] %></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Data de fim da cobetura</dt>
+              <dd><%= policy['dataFimCobertura']%></dd>
+            </div>
+          </dl>
+          <dl>
+            <div class="dl-description">
+              <dt>Marca</dt>
+              <dd><%= policy['veiculo']['marca'] %></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Modelo</dt>
+              <dd><%= policy['veiculo']['modelo']%></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Ano</dt>
+              <dd><%= policy['veiculo']['ano']%></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Placa</dt>
+              <dd><%= policy['veiculo']['placa']%></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Status</dt>
+              <dd><%= policy['status']%></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Valor do Prêmio</dt>
+              <dd><%= policy['valorPremio']%></dd>
+            </div>
+            <div class="dl-description">
+              <dt>Link de pagamento</dt>
+              <dd><a href=<%=policy['linkPagamento']%> target='_blank'><%= policy['linkPagamento']%></a></dd>
+            </div>
+          </dl>
+        </div>
+      <% end %>
+    </div>
+    <div id="link-misterioso"> </div>
   </main>
+
+  <script src="/scripts/index.js"></script>
 </body>

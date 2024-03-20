@@ -10,7 +10,10 @@
   <nav class="navbar">
     <a href="/"><h2>InsuranceFlow</h2></a>
     <div class="nav-right-side">
-      <img class="profile-image" src=<%=!user.image_url ? user.image_url : 'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'%> alt="Imagem do perfil">
+      <img class="profile-image" src=<%=!user.image_url ? user.image_url : 
+        'https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'%> 
+        alt="Imagem do perfil"
+      >
       <form action="/sign_out" target="_self" method="post"> 
         <button class="logout-button" type="submit">
           <img class="logout-icon" src="/images/logout.svg">
@@ -19,32 +22,104 @@
     </div>
   </nav>
   <main>
-    <form class="new-policy-form" action="/create_policy" method="post">
+    <form class="new-policy-form" action="/create_policy" method="post" onsubmit="submitForm(event)">
       <header>
         <h1>Nova apólice</h1>
       </header>
-      <label for="end-date">Data do fim da cobertura:</label>
-      <input class="input" id="end-date" name="end-date" type='date' placeholder=""/>
-      <label for="prize-value">Valor do prêmio:</label>
-      <input class="input-2" id="prize-value" name="prize-value" type='number' placeholder=""/>
-      <h2 class="section-header">Cliente</h2>
-      <label for="full-name">Nome Completo:</label>
-      <input class="input-2" id="full-name" name="full-name" placeholder=""/>
-      <label for="cpf">CPF:</label>
-      <input class="input-2" id="cpf" name="cpf" placeholder=""/>
-      <label for="email">Email:</label>
-      <input class="input-2" id="email" name="email" placeholder=""/>
-      <h2 class="section-header">Veículo</h2>
-      <label for="car-brand">Marca:</label>
-      <input class="input-2" id="car-brand" name="car-brand" placeholder=""/>
-      <label for="car-model">Modelo:</label>
-      <input class="input-2" id="car-model" name="car-model" placeholder=""/>
-      <label for="car-year">Ano:</label>
-      <input class="input-2" id="car-year" name="car-year" placeholder=""/>
-      <label for="car-plate">Placa:</label>
-      <input class="input-2" id="car-plate" name="car-plate" placeholder=""/>
+      <div class="inputs-div">
+        <label for="end-date">Data do fim da cobertura:</label>
+        <input required class="input" id="end-date" name="end-date" type='date' placeholder=""/>
+
+        <label for="prize-value">Valor do prêmio:</label>
+        <input required class="input-2" id="prize-value" name="prize-value" type='number' placeholder=""/>
+
+        <h2 class="section-header">Cliente</h2>
+
+        <label for="full-name">Nome Completo:</label>
+        <input required class="input-2" id="full-name" name="full-name" placeholder=""/>
+
+        <label for="cpf">CPF:</label>
+        <input required class="input-2" id="cpf" name="cpf" placeholder=""/>
+
+        <label for="email">Email:</label>
+        <input required class="input-2" id="email" name="email" type='email' placeholder=""/>
+
+        <h2 class="section-header">Veículo</h2>
+
+        <label for="car-brand">Marca:</label>
+        <input required class="input-2" id="car-brand" name="car-brand" placeholder=""/>
+
+        <label for="car-model">Modelo:</label>
+        <input required class="input-2" id="car-model" name="car-model" placeholder=""/>
+
+        <label for="car-year">Ano:</label>
+        <input required class="input-2" id="car-year" name="car-year" placeholder=""/>
+
+        <label for="car-plate">Placa:</label>
+        <input required class="input-2" id="car-plate" name="car-plate" placeholder=""/>
+      </div>
      
-      <button class="submit-button" type="submit">Criar</button>
+      <button class="submit-button" type="submit" onclick="removeErrorsDiv()">Criar</button>
     </form>
   </main>
+  <script>
+    function submitForm(event) {
+      event.preventDefault();
+      
+      var form = event.target;
+      var formData = new FormData(form);
+
+      fetch(form.action, {
+        method: form.method,
+        body: formData
+      })
+      .then(async response => {
+        if (response.ok) {
+          let parsed = await response.json();
+          if (parsed['errors'].length > 0) {
+            writeErrorsOnTheScreen(parsed['errors']);
+            showErrorNotification();
+            return;
+          }
+          localStorage.setItem('newPolicy', 'true');
+          window.location.href = '/';
+        } else {
+          console.error('Erro no servidor: ', response.status);
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao enviar o formulário:', error);
+      });
+    }
+
+    function writeErrorsOnTheScreen(errors) {
+      let inputsDiv = document.querySelector('.inputs-div');
+        inputsDiv.innerHTML = inputsDiv.innerHTML + 
+        `
+          <div class="errors-div">
+            ${errors.map(error => `<p>${error['message']}</p>`).join('')}
+          </div>
+        `
+        ;
+    }
+
+    function showErrorNotification() {
+      let main = document.getElementsByTagName('main')[0];
+      main.innerHTML = `
+          <div class="notification">
+              <h4>Erro na solicitação de criação de apólice</h4>
+              <p>Cheque os erros abaixo</p>
+          </div> 
+      ` + main.innerHTML;
+      setTimeout(function() {
+          let notification = document.getElementsByClassName('notification')[0];
+          notification.remove();
+      }, 5000);
+    }
+
+    function removeErrorsDiv(){
+      let errorsDiv = document.getElementsByClassName('errors-div')[0];
+      if (errorsDiv) errorsDiv.remove();
+    }
+  </script>
 </body>

@@ -10,6 +10,8 @@ require 'securerandom'
 require_relative './requests/graphql_requests'
 require_relative './db_setup'
 require 'net/http'
+require 'byebug'
+require 'faye/websocket'
 
 
 class MyApplication < Sinatra::Base
@@ -21,6 +23,8 @@ class MyApplication < Sinatra::Base
   use OmniAuth::Builder do
     provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], scope: 'email profile'
   end
+  set :server, 'thin'
+  set :sockets, []
 
   before do
     case request.path_info
@@ -34,12 +38,29 @@ class MyApplication < Sinatra::Base
     end
   end
 
-
   get '/' do
-    data = GraphqlRequests.query_all_polices(
-      token: session[:user][:value], token_kind: session[:user][:kind]
-    )
-    erb :index, locals: { policies: data, user: @user }
+    env = request.env
+    if Faye::WebSocket.websocket?(env)
+      ws = Faye::WebSocket.new(env)
+      settings.sockets << ws
+      ws.rack_response
+    else
+      data = GraphqlRequests.query_all_polices(
+        token: session[:user][:value], token_kind: session[:user][:kind]
+      )
+      erb :index, locals: { policies: data, user: @user }
+    end
+  end
+
+  get '/broadcast' do
+    broadcast('Hello, world!')
+  end
+
+  post '/payment_link' do
+    body = request.body.read
+    p body
+    broadcast(body)
+    status 200
   end
 
   get '/login' do
@@ -102,6 +123,8 @@ class MyApplication < Sinatra::Base
     token_kind = session[:user][:kind]
     response = Net::HTTP.post(URI('http://graphql_api:3001/graphql'), mutation, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}", 'Token-Kind' => token_kind)
     p response.body
+    p response.code
+    response.body
   end
 
   post '/policies' do
@@ -126,6 +149,11 @@ class MyApplication < Sinatra::Base
 
 
   private
+
+  def broadcast(message)
+    settings.sockets.each { |s| s.send(message) }
+  end
+
 
   def logged_in?
     return false if session[:user].nil? || session[:user][:value].nil? || session[:user][:kind].nil?

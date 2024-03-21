@@ -94,11 +94,24 @@ body {
     justify-content: space-between;
 }
 
-.notification {
+.notification-div {
     position: fixed;
     top: 80px;
     right: 0px;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.notification {
     background-color: green;
+    padding: 10px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.notification-error {
+    background-color: rgb(203, 15, 15);
     padding: 10px;
     transition: opacity 0.3s ease-in-out;
 }

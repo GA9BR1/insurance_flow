@@ -56,7 +56,7 @@ class MyApplication < Sinatra::Base
     broadcast('Hello, world!')
   end
 
-  post '/payment_link' do
+  post '/send_to_websockets' do
     body = request.body.read
     p body
     broadcast(body)

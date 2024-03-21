@@ -76,7 +76,8 @@
       .then(async response => {
         if (response.ok) {
           let parsed = await response.json();
-          if (parsed['errors'].length > 0) {
+          console.log(parsed)
+          if (parsed['errors'] && parsed['errors'].length > 0) {
             writeErrorsOnTheScreen(parsed['errors']);
             showErrorNotification();
             return;

@@ -29,10 +29,13 @@ class PolicyWorker
         vehicle = Vehicle.create!(parsed_json["vehicle"])
         policy = Policy.create!(issue_date: parsed_json["issue_date"], coverage_end: parsed_json["coverage_end"],
                                 prize_value: parsed_json["prize_value"], insured:, vehicle:, payment_link: response.url)
-        response = Net::HTTP.post(URI('http://web_app:3000/payment_link'),
-        PolicySerializer.serialize(policy).to_json,
+        response = Net::HTTP.post(URI('http://web_app:3000/send_to_websockets'),
+        {"type" => "policy_created", "policy" => PolicySerializer.serialize(policy)}.to_json,
         'Content-Type' => 'application/json')
       rescue StandardError => e
+        response = Net::HTTP.post(URI('http://web_app:3000/send_to_websockets'),
+        {"type" => "policy_creation_error", "message" => e}.to_json,
+        'Content-Type' => 'application/json')
         puts "Error occurred during transaction: #{e.message}"
         Sneakers.logger.error "Error occurred during transaction: #{e.message}"
         Stripe::PaymentLink.retrieve(response.id)

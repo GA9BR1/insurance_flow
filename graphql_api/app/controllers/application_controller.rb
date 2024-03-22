@@ -3,7 +3,7 @@ require 'net/http'
 
 class ApplicationController < ActionController::Base
     skip_before_action :verify_authenticity_token
-    before_action :authenticate_request
+    before_action :authenticate_request, unless: :webhook_controller?
 
 
     def authenticate_request
@@ -21,5 +21,11 @@ class ApplicationController < ActionController::Base
             return render json: { error: "You're unauthorized to use this api" }, status: :unauthorized
         end
       end
+    end
+
+    private
+
+    def webhook_controller?
+      controller_name == 'webhook'
     end
 end

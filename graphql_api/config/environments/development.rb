@@ -37,6 +37,7 @@ Rails.application.configure do
   end
 
   config.hosts << "graphql_api"
+  config.hosts << "fun-barnacle-helping.ngrok-free.app"
 
   config.cache_store = :memory_store
   config.cache_classes = true

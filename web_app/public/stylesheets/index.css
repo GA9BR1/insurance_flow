@@ -105,9 +105,16 @@ body {
 }
 
 .notification {
-    background-color: green;
+    background-color: rgba(0, 128, 0, 0.842);
     padding: 10px;
     transition: opacity 0.3s ease-in-out;
+}
+
+.close-button {
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .notification-error {

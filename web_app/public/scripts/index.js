@@ -7,13 +7,27 @@ ws.onmessage = function(event) {
     let json = JSON.parse(event.data);
     switch(json['type']) {
         case 'policy_created':
-            showPolicyCreatedNotification();
-            let policy = json['policy']
-            addPolicyToList(policy);
+            showNotification(
+                {
+                    title: 'Apólice criada com sucesso!',
+                    description: 'A apólice já foi criada, e deve aparecer na lista, a mesma aguarda pagamento'
+                }
+            )
+            addPolicyToList(json['policy']);
             break;
         case 'policy_creation_error':
             let message = json['message']
             showPolicyCreationErrorNotification(message);
+            break;
+        case 'policy_payment':
+            let policy_id = json['policy_id']
+            showNotification(
+                {
+                    title: 'Pagamento de apólice realizado',
+                    description: `A apólice com o id: ${policy_id} agora está ativa`
+                }
+            )
+            changePolicyStatus(policy_id);
             break;
     }
     console.log('Received message: ' + event.data);
@@ -22,41 +36,33 @@ ws.onmessage = function(event) {
 
 if (localStorage.getItem('newPolicy') == 'true') {
     localStorage.setItem('newPolicy', 'false');
-    showNewPolicyNotification();
+    showNotification({
+        title: 'Solicitação de Apólice realizado com sucesso!', 
+        description: 'Normalmente você terá um feedback em no máximo 1 minuto'
+    });
 }
 
-function showNewPolicyNotification() {
+function showNotification({title, description}) {
     let notificationDiv = document.getElementsByClassName('notification-div')[0];
     let notification = document.createElement('div');
     notification.className = 'notification';
     notification.innerHTML = `
-        <h4>Solicitação de Apólice realizado com sucesso!</h4>
-        <p>Normalmente você terá um feedback em no máximo 1 minuto</p>
+        <div class="close-button" onclick="closeNotification(event)">X</div>
+        <h4>${title}</h4>
+        <p>${description}</p>
     `;
-    notificationDiv.appendChild(notification);
-
-
-    setTimeout(function() {
-        let notification = document.getElementsByClassName('notification')[0];
-        notification.remove();
-    }, 5000);
+    notificationDiv.insertBefore(notification, notificationDiv.firstChild);
 }
 
-function showPolicyCreatedNotification(){
-    let notificationDiv = document.getElementsByClassName('notification-div')[0];
-    let notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.innerHTML = `
-        <h4>Apólice criada com sucesso!</h4>
-        <p>A apólice já foi criada, e deve aparecer na lista, a mesma aguarda pagamento</p>
-    `;
-    notificationDiv.appendChild(notification);
+function changePolicyStatus(policy_id) {
+    policy = document.getElementById(policy_id);
+    let statusElement = policy.getElementsByTagName('dd')[8];
+    statusElement.innerText= "emited"
+}
 
-
-    setTimeout(function() {
-        let notification = document.getElementsByClassName('notification')[0];
-        notification.remove();
-    }, 5000);
+function closeNotification(event) {
+    let notification = event.target.parentNode;
+    notification.remove();
 }
 
 function showPolicyCreationErrorNotification(message) {
@@ -76,9 +82,10 @@ function showPolicyCreationErrorNotification(message) {
 }
 
 function addPolicyToList(policy) {
-    var div = document.getElementById('polices-div');
+    var div = document.getElementsByClassName('polices-div')[0];
+        console.log(policy);
         div.innerHTML = `
-        <div class="policy-card">
+        <div id=${policy['policy_id']} class="policy-card">
             <dl>
                 <div class="dl-description">
                     <dt>Nome</dt>

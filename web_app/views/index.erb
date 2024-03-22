@@ -23,9 +23,9 @@
     <div class="notification-div"></div>
     <h1>Apólices</h1>
     <a class="new-policy-link" href="/policies/new">Criar nova apolice</a>
-    <div id="polices-div" class="polices-div"> 
+    <div class="polices-div"> 
       <% policies.each do |policy| %>
-        <div class="policy-card">
+        <div id=<%= policy['policyId']%> class="policy-card">
           <dl>
             <div class="dl-description">
               <dt>Nome</dt>

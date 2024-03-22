@@ -147,7 +147,6 @@ class MyApplication < Sinatra::Base
       'redirect_uri=http://localhost:3000/auth/cognito-idp/callback'
   end
 
-
   private
 
   def broadcast(message)

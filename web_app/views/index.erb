@@ -28,6 +28,10 @@
         <div id=<%= policy['policyId']%> class="policy-card">
           <dl>
             <div class="dl-description">
+              <dt>Id</dt>
+              <dd><%=policy['policyId']%></dd>
+            </div>
+            <div class="dl-description">
               <dt>Nome</dt>
               <dd><%= policy['segurado']['nome'] %></dd>
             </div>

@@ -70,15 +70,11 @@ function showPolicyCreationErrorNotification(message) {
     let notification = document.createElement('div');
     notification.className = 'notification-error';
     notification.innerHTML = `
+        <div class="close-button" onclick="closeNotification(event)">X</div>
         <h4>Erro na criação da ápolice solicitada!</h4>
         <p>${message}</p>
     `;
-    notificationDiv.appendChild(notification);
-
-    setTimeout(function() {
-        let notification = document.getElementsByClassName('notification-error')[0];
-        notification.remove();
-    }, 5000);
+    notificationDiv.insertBefore(notification, notificationDiv.firstChild);
 }
 
 function addPolicyToList(policy) {
@@ -87,6 +83,10 @@ function addPolicyToList(policy) {
         div.innerHTML = `
         <div id=${policy['policy_id']} class="policy-card">
             <dl>
+                <div class="dl-description">
+                    <dt>Id</dt>
+                    <dd>${policy['policy_id']}</dd>
+                </div>
                 <div class="dl-description">
                     <dt>Nome</dt>
                     <dd>${policy['segurado']['nome']}</dd>

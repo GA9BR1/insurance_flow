@@ -20,13 +20,6 @@ class CognitoAuthMiddleware
       token = JSON.parse(response.body)
       env['rack.session'][:user] = { value: token['access_token'], kind: 'cognito' }
     end
-
-    if request.path_info.match?(/^\/auth\/cognito-idp(?:\/|$)/)
-      p '----------------'
-      p Rack::Protection::AuthenticityToken.new(@app).accepts?(env)
-      p '----------------'
-      puts 'XD'
-    end
     @app.call(env)
   end
 end

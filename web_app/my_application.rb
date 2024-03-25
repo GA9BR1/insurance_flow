@@ -135,7 +135,7 @@ class MyApplication < Sinatra::Base
     redirect '/'
   end
 
-  post '/auth/cognito-idp' do
+  get '/auth/cognito-idp' do
     redirect 'https://relabs-pool.auth.us-east-1.amazoncognito.com/login?' \
       'response_type=code&client_id=2m0gcvut6sh3ggassgu6srn4jr&' \
       'redirect_uri=http://localhost:3000/auth/cognito-idp/callback'

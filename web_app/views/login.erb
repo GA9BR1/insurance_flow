@@ -72,9 +72,8 @@
               <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
               <button class='auth2-login-button' type='submit'><img src="/images/google_logo.svg"></button>
             </form>
-            <form method='post' 
+            <form method='get' 
                   action="/auth/cognito-idp">  
-              <input type="hidden" name="authenticity_param" value="<%= csrf_token %>">
               <button class='auth2-login-button' type='submit'><h3>Cognito</h3></button>
             </form>
           </div>

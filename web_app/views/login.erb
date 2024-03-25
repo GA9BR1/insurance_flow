@@ -59,6 +59,7 @@
       <div class='form-div'>
         <form class='login-form' method='post' action='/authenticate'>
           <div class='login-inputs-div'>
+              <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
               <input class="login-input" type="text" name="email" placeholder='Email' />
               <input class="login-input" type="password" name="password" placeholder='Senha' />  
           </div>

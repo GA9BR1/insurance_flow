@@ -18,7 +18,10 @@ class MyApplication < Sinatra::Base
   configure do
     set :sessions, true
   end
-
+  use Rack::Protection::AuthenticityToken, allow_if: ->(env) {
+    path = env['PATH_INFO']
+    path.start_with?('/send_to_websockets') || path.start_with?('/sign_out')
+  }
   use Rack::Session::Cookie, :secret => ENV['RACK_COOKIE_SECRET']
   use OmniAuth::Builder do
     provider :google_oauth2, ENV['GOOGLE_KEY'], ENV['GOOGLE_SECRET'], scope: 'email profile'
@@ -37,6 +40,8 @@ class MyApplication < Sinatra::Base
       logged_in? ? redirect('/') : return
     when '/policies/new'
       not_logged_in? ? redirect('/login') : return
+    when '/send_to_websockets'
+      return verifiy_authenticity
     end
   end
 
@@ -60,7 +65,6 @@ class MyApplication < Sinatra::Base
 
   post '/send_to_websockets' do
     body = request.body.read
-    p body
     broadcast(body)
     status 200
   end
@@ -70,6 +74,15 @@ class MyApplication < Sinatra::Base
       google_key: ENV['GOOGLE_KEY'],
       csrf_token: request.env['rack.session']['csrf']
     }
+  end
+
+  post '/sign_out' do
+    session[:user] = nil
+    redirect '/'
+  end
+
+  get '/policies/new' do
+    erb :new_policy, locals: { user: @user, csrf_token: request.env['rack.session']['csrf'] }
   end
 
   post '/authenticate' do
@@ -83,49 +96,12 @@ class MyApplication < Sinatra::Base
     end
   end
 
-  post '/sign_out' do
-    session[:user] = nil
-    redirect '/'
-  end
-
-  get '/policies/new' do
-    erb :new_policy, locals: { user: @user }
-  end
-
   post '/create_policy' do
-    p request.params
-    mutation = {
-  query: <<-GRAPHQL
-    mutation {
-      createPolicy(input: {
-        policy: {
-          dataEmissao: "#{Date.today.to_s}",
-          dataFimCobertura: "#{request.params['end-date']}",
-          valorPremio: #{request.params['prize-value']},
-          segurado: {
-            nome: "#{request.params['full-name']}",
-            cpf: "#{request.params['cpf']}",
-            email: "#{request.params['email']}"
-          },
-          veiculo: {
-            marca: "#{request.params['car-brand']}",
-            modelo: "#{request.params['car-model']}",
-            ano: #{request.params['car-year']},
-            placa: "#{request.params['car-plate']}"
-          }
-        }
-      }) {
-        result
-      }
-    }
-  GRAPHQL
-}.to_json
-    token = session[:user][:value]
-    token_kind = session[:user][:kind]
-    response = Net::HTTP.post(URI('http://graphql_api:3001/graphql'), mutation, 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{token}", 'Token-Kind' => token_kind)
-    p response.body
-    p response.code
-    response.body
+    GraphqlRequests.mutation_create_policy(
+      token: session[:user][:value],
+      token_kind: session[:user][:kind],
+      params:
+    )
   end
 
   get '/auth/:provider/callback' do
@@ -147,6 +123,17 @@ class MyApplication < Sinatra::Base
     settings.sockets.each { |s| s.send(message) }
   end
 
+  def verifiy_authenticity
+    bearer = request.env['HTTP_AUTHORIZATION']
+    halt 401 if bearer.nil?
+    token = bearer.split(' ').last
+    begin
+      decoded_token = JWT.decode(token, ENV['JWT_SECRET'], true, algorithm: 'HS256')
+      return
+    rescue StandardError => e
+      halt 401
+    end
+  end
 
   def logged_in?
     return false if session[:user].nil? || session[:user][:value].nil? || session[:user][:kind].nil?

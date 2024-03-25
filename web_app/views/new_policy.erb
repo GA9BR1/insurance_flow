@@ -27,6 +27,7 @@
         <h1>Nova apólice</h1>
       </header>
       <div class="inputs-div">
+        <input type="hidden" name="authenticity_token" value="<%= csrf_token %>">
         <label for="end-date">Data do fim da cobertura:</label>
         <input required class="input" id="end-date" name="end-date" type='date' placeholder=""/>
 

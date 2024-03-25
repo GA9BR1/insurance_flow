@@ -9,4 +9,42 @@ module GraphqlRequests
 
     JSON.parse(response.body)['data']['policies']
   end
+
+  def self.mutation_create_policy(token:, token_kind:, params:)
+    mutation =
+    {
+      query: <<-GRAPHQL
+        mutation {
+          createPolicy(input: {
+            policy: {
+              dataEmissao: "#{Date.today.to_s}",
+              dataFimCobertura: "#{params['end-date']}",
+              valorPremio: #{params['prize-value']},
+              segurado: {
+                nome: "#{params['full-name']}",
+                cpf: "#{params['cpf']}",
+                email: "#{params['email']}"
+              },
+              veiculo: {
+                marca: "#{params['car-brand']}",
+                modelo: "#{params['car-model']}",
+                ano: #{params['car-year']},
+                placa: "#{params['car-plate']}"
+              }
+            }
+          }) {
+            result
+          }
+        }
+      GRAPHQL
+    }.to_json
+    response = Net::HTTP.post(
+    GRAPHQL_URI,
+    mutation,
+    'Content-Type' => 'application/json',
+    'Authorization' => "Bearer #{token}",
+    'Token-Kind' => token_kind
+    )
+    response.body
+  end
 end

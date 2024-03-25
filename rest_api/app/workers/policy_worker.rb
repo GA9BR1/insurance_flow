@@ -35,11 +35,16 @@ class PolicyWorker
         policy.update!(payment_link: response_payment.url)
         response = Net::HTTP.post(URI('http://web_app:3000/send_to_websockets'),
         {"type" => "policy_created", "policy" => PolicySerializer.serialize(policy)}.to_json,
-        'Content-Type' => 'application/json')
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{JWT.encode({id: SecureRandom.uuid}, ENV['JWT_SECRET'], 'HS256')}"
+        )
       rescue StandardError => e
         response = Net::HTTP.post(URI('http://web_app:3000/send_to_websockets'),
         {"type" => "policy_creation_error", "message" => e}.to_json,
-        'Content-Type' => 'application/json')
+
+          'Content-Type' => 'application/json',
+          'Authorization' => "Bearer #{JWT.encode({id: SecureRandom.uuid}, ENV['JWT_SECRET'], 'HS256')}"
+        )
         puts "Error occurred during transaction: #{e.message}"
         Sneakers.logger.error "Error occurred during transaction: #{e.message}"
         Stripe::PaymentLink.retrieve(response_payment.id)

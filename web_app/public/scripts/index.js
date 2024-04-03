@@ -56,7 +56,7 @@ function showNotification({title, description}) {
 
 function changePolicyStatus(policy_id) {
     policy = document.getElementById(policy_id);
-    let statusElement = policy.getElementsByTagName('dd')[8];
+    let statusElement = policy.getElementsByTagName('dd')[9];
     statusElement.innerText= "emited"
 }
 

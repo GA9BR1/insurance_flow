@@ -1,6 +1,6 @@
 require 'sequel'
 
-DB = Sequel.connect('sqlite://myDb.db', create: true, max_connections: 5)
+DB = Sequel.connect('sqlite://myDb.db', create: true, max_connections: 20)
 
 
 unless DB.table_exists?(:users)

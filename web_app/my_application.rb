@@ -34,7 +34,6 @@ class MyApplication < Sinatra::Base
   before do
     case request.path_info
     when '/'
-      p session[:user]
       not_logged_in? ? redirect('/login') : return
     when '/login'
       logged_in? ? redirect('/') : return

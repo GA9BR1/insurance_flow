@@ -10,7 +10,8 @@ ws.onmessage = function(event) {
             showNotification(
                 {
                     title: 'Apólice criada com sucesso!',
-                    description: 'A apólice já foi criada, e deve aparecer na lista, a mesma aguarda pagamento'
+                    description: 'A apólice já foi criada, e deve aparecer na lista, a mesma aguarda pagamento',
+                    type: 'policy-created'
                 }
             )
             addPolicyToList(json['policy']);
@@ -24,7 +25,8 @@ ws.onmessage = function(event) {
             showNotification(
                 {
                     title: 'Pagamento de apólice realizado',
-                    description: `A apólice com o id: ${policy_id} agora está ativa`
+                    description: `A apólice com o id: ${policy_id} agora está ativa`,
+                    type: 'policy-payment'
                 }
             )
             changePolicyStatus(policy_id);
@@ -38,14 +40,15 @@ if (localStorage.getItem('newPolicy') == 'true') {
     localStorage.setItem('newPolicy', 'false');
     showNotification({
         title: 'Solicitação de Apólice realizado com sucesso!', 
-        description: 'Normalmente você terá um feedback em no máximo 1 minuto'
+        description: 'Normalmente você terá um feedback em no máximo 1 minuto',
+        type: 'solicitation-success'
     });
 }
 
-function showNotification({title, description}) {
+function showNotification({title, description, type}) {
     let notificationDiv = document.getElementsByClassName('notification-div')[0];
     let notification = document.createElement('div');
-    notification.className = 'notification';
+    notification.className = 'notification ' + type;
     notification.innerHTML = `
         <div class="close-button" onclick="closeNotification(event)">X</div>
         <h4>${title}</h4>

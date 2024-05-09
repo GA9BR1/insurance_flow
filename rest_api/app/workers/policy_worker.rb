@@ -11,13 +11,16 @@ class PolicyWorker
     puts parsed_json
     ActiveRecord::Base.connection_pool.with_connection do
       ActiveRecord::Base.transaction do
-        policy = create_policy(parsed_json)
-        policy.update!(payment_link: generate_payment_link(policy, parsed_json).url)
-        send_policy_creation_websockets_message(policy)
-      rescue StandardError => e
-        send_policy_creation_error_websockets_message(e)
-        Stripe::PaymentLink.retrieve(response_payment.id)
-        handle_error(msg, e)
+        begin
+          policy = create_policy(parsed_json)
+          policy.update!(payment_link: generate_payment_link(policy, parsed_json).url)
+          send_policy_creation_websockets_message(policy)
+        rescue StandardError => e
+          send_policy_creation_error_websockets_message(e)
+          handle_error(msg, e)
+          ack!
+          raise ActiveRecord::Rollback
+        end
       end
     end
     ack!
@@ -41,6 +44,7 @@ class PolicyWorker
   end
 
   def send_policy_creation_error_websockets_message(error)
+    p '=========== ERROR message ============'
     response = Net::HTTP.post(URI('http://web_app:3000/send_to_websockets'),
         {"type" => "policy_creation_error", "message" => error}.to_json,
 
